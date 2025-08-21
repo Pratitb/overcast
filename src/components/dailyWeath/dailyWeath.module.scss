@@ -1,0 +1,6 @@
+.main-left{
+    &__daily{
+        @extend %flex-column-center;
+        border: 1px solid #E0E0E0;
+    }
+}

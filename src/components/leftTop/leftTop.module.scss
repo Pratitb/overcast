@@ -1,6 +1,7 @@
 .main-left {
     &__greet__date {
         @extend %flex-between-center;
+        font-weight: 200;
         margin-bottom: 20px;
     }
 
@@ -10,6 +11,8 @@
 
     &__location {
         font-size: 18px;
+        font-weight: 200;
         text-align: center;
+        text-decoration: underline;
     }
 }

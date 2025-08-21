@@ -1,10 +1,12 @@
-import React from 'react'
+import type { LeftMidType } from '../../types'
+import midCss from './leftMid.module.scss'
 
-const LeftMid = () => {
+const LeftMid = ({ currentTemp, weathType }: LeftMidType) => {
     return (
-        <div className='main__left-mid'>
-            <p className='main__left__temp'></p>
-            <p className='main__left__weath--type'></p>
+        <div className={`${midCss['main-left__mid']}`}>
+            {/* { <span className={`${midCss['main-left__unit']}`}>&deg;C</span>} */}
+            <p className={`${midCss['main-left__temp']}`}>{currentTemp}</p>
+            <p className={`${midCss['main-left__weath-type']}`}>{weathType}</p>
         </div>
     )
 }
