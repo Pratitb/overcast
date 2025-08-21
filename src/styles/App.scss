@@ -1,0 +1,50 @@
+@use './partials/reset';
+@use './partials/variables';
+@use './partials/extends';
+
+body {
+    font-family: "Inter", sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-wrapper {
+    @extend %flex-column-center;
+    gap: $main-wrapper-gap;
+    min-height: 100vh;
+    border-radius: $radius-20;
+    padding: $main-padding;
+}
+
+.main-app-name {
+    width: 100%;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding: $main-padding;
+    border-radius: $radius-20;
+    background: $app-name;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.main-left {
+    width: 100%;
+    flex: 1;
+    padding: $main-padding;
+    border-radius: $radius-20;
+    background: $main-left-grey;
+}
+
+.main-right {
+    width: 100%;
+    flex: 1;
+    padding: $main-padding;
+    border-radius: $radius-20;
+    background: $main-right-white;
+}

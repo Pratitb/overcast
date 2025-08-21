@@ -1,0 +1,15 @@
+.main-left {
+    &__greet__date {
+        @extend %flex-between-center;
+        margin-bottom: 20px;
+    }
+
+    &__greeting {
+        text-transform: capitalize;
+    }
+
+    &__location {
+        font-size: 18px;
+        text-align: center;
+    }
+}
