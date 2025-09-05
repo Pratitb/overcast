@@ -1,8 +1,8 @@
 import './styles/App.scss'
 import LeftMid from './components/leftMid/leftMid'
 import LeftTop from './components/leftTop/leftTop'
-import { useEffect, useMemo, useState } from 'react';
-import type { CodesType, CurrWeathType, WeatherType } from './types';
+import { useEffect, useState } from 'react';
+import type { CurrWeathType, WeatherType } from './types';
 
 function App() {
 
@@ -67,38 +67,25 @@ function App() {
     getGeoLocation()
   }, [])
 
-  const weatherCodes: CodesType[] = [
-    { code: 0, type: 'clear sky' },
-    { code: 1, type: 'clear' },
-    { code: 2, type: 'cloudy' },
-    { code: 3, type: 'overcast' },
-    { code: 4, type: 'foggy' },
-    { code: 5, type: 'drizzle' },
-    { code: 6, type: 'rain' },
-    { code: 7, type: 'snow' },
-    { code: 8, type: 'heavy rain' },
-    { code: 9, type: 'thunderstorm' },
-  ]
-  const precipitationRate = [
-    { rate: 0, type: 'dry' },
-    { rate: 0.1 - 2.5, type: 'drizzle' },
-    { rate: 2.6 - 7.5, type: 'moderate rain' },
-    { rate: 7.6 - 50, type: 'heavy rain' },
-    { rate: 51, type: 'extreme rain' },
-  ]
+  const getWeatherCategory = (code: number) => {
+    if ([0, 1].includes(code ?? 0)) return "Sunny";
+    if ([2, 3].includes(code ?? 0)) return "Cloudy";
+    if ([45, 48].includes(code ?? 0)) return "Foggy";
 
-  const codeToType = weatherCodes?.find((curr) => curr?.code === currWeath?.weathercode)
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return "Rainy";
+    if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return "Snowy";
 
-  const dailyMemoData = useMemo(() => {
-    if (!daily) return
-  }, [])
+    if ([95, 96, 99].includes(code)) return "Stormy";
+
+    return "Unknown";
+  }
 
   return (
     <div className='main-wrapper'>
       <p className='main-app-name'>overcast</p>
       <div className='main-left'>
         <LeftTop greetingVal={greeting} dateVal={getDate} locationName={`${weather?.latitude}, ${weather?.longitude}`} />
-        <LeftMid currentTemp={currWeath?.temperature} weathType={codeToType?.type} />
+        <LeftMid currentTemp={currWeath?.temperature} weathType={getWeatherCategory(currWeath?.weathercode ?? 0)} speed={currWeath?.windspeed} speedUnit={weather?.current_weather_units?.windspeed} />
       </div>
       <div className='main-right'>
         <LeftTop />

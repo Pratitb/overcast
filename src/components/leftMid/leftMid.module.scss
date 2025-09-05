@@ -1,18 +1,29 @@
-.main-left{
-    &__mid{
-        @extend %flex-column-center;
-        margin-top: 30px;
+.main-left {
+    &__temp {
+        @extend %flex-start;
+
+        &__num {
+            font-size: 80px;
+            letter-spacing: 4px;
+            line-height: 1;
+        }
     }
-    &__temp{
-        font-size: 80px;
+
+    &__unit {
+        font-size: 40px;
+        font-weight: 100;
+        margin-left: 10px;
     }
-    &__unit{
-        font-size: 30px;
-        font-weight: 200;
-    }
-    &__weath-type{
-        text-transform: capitalize;
-        font-size: 20px;
-        font-weight: 200;
+
+    &__metrics {
+        @extend %flex-start;
+        gap: 10px;
+        margin-top: 10px;
+
+        &-type {
+            text-transform: capitalize;
+            font-size: 16px;
+            font-weight: 200;
+        }
     }
 }
