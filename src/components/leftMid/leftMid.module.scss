@@ -1,4 +1,8 @@
 .main-left {
+    &__mid {
+        flex: 1
+    }
+
     &__temp {
         @extend %flex-start;
 

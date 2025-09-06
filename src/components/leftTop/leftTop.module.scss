@@ -1,4 +1,8 @@
 .main-left {
+    &__top {
+        width: 100%;
+    }
+
     &__greet__date {
         @extend %flex-between-center;
         font-weight: 200;

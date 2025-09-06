@@ -1,8 +1,15 @@
 $main-left-grey: #e9e9e9;
 $main-right-white: #f6f6f6;
 $app-name: #E5E0D8;
+$hourly-time: #212121;
+$hourly-temp: #616161;
+$hourly-type: #9E9E9E;
 
+$radius-10: 10px;
 $radius-20: 20px;
 $main-wrapper-gap: 20px;
 $main-height: 95vh;
 $main-padding: 20px;
+
+$shadow-hourly: 0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1)

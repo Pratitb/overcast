@@ -2,16 +2,17 @@ import './styles/App.scss'
 import LeftMid from './components/leftMid/leftMid'
 import LeftTop from './components/leftTop/leftTop'
 import { useEffect, useState } from 'react';
-import type { CurrWeathType, WeatherType } from './types';
+import type { CurrWeathType, HourlyDataType, HourlyItemType, WeatherType } from './types';
+import HourlyCard from './components/hourlyCard/hourlyCard';
 
 function App() {
 
-  // greeting states
+  // greeting states ----------------------------------------------------
   const [greeting, setGreeting] = useState<string>('');
   const getDate = new Date().toDateString()
   const getHours = new Date().getHours()
 
-  // set the greeting text
+  // set the greeting text ----------------------------------------------------
   useEffect(() => {
     if (getHours < 12) {
       setGreeting('morning')
@@ -24,15 +25,14 @@ function App() {
     }
   }, [getHours])
 
-  // weather states
-  const [loading, setLoading] = useState(true)
+  // weather states ----------------------------------------------------
   const [weather, setWeather] = useState<WeatherType>()
+  console.log(weather, 'weather')
   const [currWeath, setCurrWeath] = useState<CurrWeathType>()
-  const [daily, setDaily] = useState(null)
-  const [city, setCity] = useState('')
-  const [region, setRegion] = useState('')
+  const [hourly, setHourly] = useState<HourlyDataType>()
+  const [hourlySeven, setHourlySeven] = useState<any>([])
 
-  // get user lat long via permission
+  // get user lat long via permission ----------------------------------------------------
   const getGeoLocation = () => {
     // here we are checking if user provides its location or not
     if ('geolocation' in navigator) {
@@ -41,32 +41,32 @@ function App() {
 
         // fetch weather data based on lat & long
         try {
-          const fetchWeather = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto`)
+          const fetchWeather = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,apparent_temperature,precipitation,weathercode,relative_humidity_2m,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto`
+          );
           if (!fetchWeather.ok) {
             throw new Error('Fetching weather data failed. Please try again later')
           }
           const weatherData = await fetchWeather?.json()
-          console.log(weatherData, 'weatherData')
           setWeather(weatherData)
           setCurrWeath(weatherData?.current_weather)
-          setDaily(weatherData?.daily)
-          setLoading(false)
+          // setDaily(weatherData?.daily)
+          setHourly(weatherData?.hourly)
         }
         catch (error) {
           console.log(error)
         }
       })
     }
-    else {
-      setLoading(false)
-    }
 
   }
 
+  // call geolocation on initial render ----------------------------------------------------
   useEffect(() => {
     getGeoLocation()
   }, [])
 
+  // decide weather type ----------------------------------------------------
   const getWeatherCategory = (code: number) => {
     if ([0, 1].includes(code ?? 0)) return "Sunny";
     if ([2, 3].includes(code ?? 0)) return "Cloudy";
@@ -80,12 +80,53 @@ function App() {
     return "Unknown";
   }
 
+  // get next seven hours
+  const getNextSevenHours = (hourly: any) => {
+    if (!hourly || !hourly.time) return [];
+
+    const now = new Date();
+    // YYYY-MM-DD & HH
+    const currentDate = now.toISOString().slice(0, 10);
+    const currentHourLocal = now?.getHours()?.toString()?.padStart(2, "0");
+
+    // Match Open-Meteo format → "YYYY-MM-DDTHH"
+    const currentHourIso = `${currentDate}T${currentHourLocal}`;
+
+    // Find current hour index in API response
+    const currentIndex = hourly?.time?.findIndex((t: string) => t?.startsWith(currentHourIso));
+
+    if (currentIndex === -1) return [];
+
+    // Take next 7 hours
+    const nextSeven = hourly?.time?.slice(currentIndex + 1, currentIndex + 10)?.map((time: string, index: number) => ({
+      time: time?.split("T")[1],
+      temp: hourly?.temperature_2m[currentIndex + index],
+      type: getWeatherCategory(hourly?.weathercode[currentIndex + index] ?? 0),
+    }));
+
+    return nextSeven;
+  };
+
+  // call seven hour data function ----------------------------------------------------
+  useEffect(() => {
+    if (!hourly) return;
+    setHourlySeven(getNextSevenHours(hourly));
+  }, [hourly]);
+
+
+
+
   return (
     <div className='main-wrapper'>
       <p className='main-app-name'>overcast</p>
       <div className='main-left'>
         <LeftTop greetingVal={greeting} dateVal={getDate} locationName={`${weather?.latitude}, ${weather?.longitude}`} />
         <LeftMid currentTemp={currWeath?.temperature} weathType={getWeatherCategory(currWeath?.weathercode ?? 0)} speed={currWeath?.windspeed} speedUnit={weather?.current_weather_units?.windspeed} />
+        <div className='main-left-hourly'>
+          {hourlySeven?.map((hourlyItem: HourlyItemType, hourlyIndex: number) => (
+            <HourlyCard key={hourlyIndex} time={hourlyItem?.time} temp={hourlyItem?.temp} type={hourlyItem?.type} />
+          ))}
+        </div>
       </div>
       <div className='main-right'>
         <LeftTop />

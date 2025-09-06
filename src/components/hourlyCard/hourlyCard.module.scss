@@ -1,0 +1,26 @@
+.main-hour {
+    &__wrap {
+        @extend %flex-column-center;
+        gap: 5px;
+        min-width: 76px;
+        padding: 10px;
+        border: 1px solid #BDBDBD;
+        border-radius: $radius-10;
+        box-shadow: $shadow-hourly;
+    }
+
+    &__time {
+        font-size: 12px;
+        color: $hourly-time;
+    }
+
+    &__temp {
+        font-size: 20px;
+        color: $hourly-temp;
+    }
+
+    &__type {
+        font-size: 14px;
+        color: $hourly-type;
+    }
+}

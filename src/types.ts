@@ -48,3 +48,22 @@ export type DailyWeathType = {
     temp?: number
     type?: string
 }
+export type HourlyType = {
+    time?: string
+    temp?: number
+    type?: string
+}
+export type HourlyDataType = {
+    time: string[]
+    temperature_2m: number[]
+    apparent_temperature: number[]
+    precipitation: number[]
+    weathercode: number[]
+    relative_humidity_2m: number[]
+    windspeed_10m: number[]
+}
+export type HourlyItemType = {
+    time?: string
+    temp?: number
+    type?: string
+}

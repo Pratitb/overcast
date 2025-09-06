@@ -35,10 +35,19 @@ body {
 
 .main-left {
     width: 100%;
+    @extend %flex-column-start;
     flex: 1;
     padding: $main-padding;
     border-radius: $radius-20;
     background: $main-left-grey;
+
+    &-hourly {
+        @extend %flex-center;
+        gap: 10px;
+        flex-wrap: wrap;
+        max-height: 200px;
+        overflow: hidden auto;
+    }
 }
 
 .main-right {
