@@ -43,9 +43,10 @@ body {
 
     &-hourly {
         @extend %flex-center;
-        gap: 10px;
+        gap: 15px;
         flex-wrap: wrap;
-        max-height: 200px;
+        max-height: 230px;
+        margin-top: 25px;
         overflow: hidden auto;
     }
 }
@@ -56,4 +57,16 @@ body {
     padding: $main-padding;
     border-radius: $radius-20;
     background: $main-right-white;
+
+    &-head {
+        text-transform: capitalize;
+        font-weight: 200;
+    }
+
+    &-daily {
+        @extend %flex-start;
+        flex-wrap: wrap;
+        gap: 10px 5px;
+        margin-top: 20px;
+    }
 }

@@ -29,6 +29,9 @@ function App() {
   const [weather, setWeather] = useState<WeatherType>()
   console.log(weather, 'weather')
   const [currWeath, setCurrWeath] = useState<CurrWeathType>()
+  const [daily, setDaily] = useState()
+  const [formattedDates, setFormattedDates] = useState([])
+  const [dailyObjs, setDailyObjs] = useState([])
   const [hourly, setHourly] = useState<HourlyDataType>()
   const [hourlySeven, setHourlySeven] = useState<any>([])
 
@@ -50,7 +53,7 @@ function App() {
           const weatherData = await fetchWeather?.json()
           setWeather(weatherData)
           setCurrWeath(weatherData?.current_weather)
-          // setDaily(weatherData?.daily)
+          setDaily(weatherData?.daily)
           setHourly(weatherData?.hourly)
         }
         catch (error) {
@@ -71,12 +74,9 @@ function App() {
     if ([0, 1].includes(code ?? 0)) return "Sunny";
     if ([2, 3].includes(code ?? 0)) return "Cloudy";
     if ([45, 48].includes(code ?? 0)) return "Foggy";
-
     if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return "Rainy";
     if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return "Snowy";
-
     if ([95, 96, 99].includes(code)) return "Stormy";
-
     return "Unknown";
   }
 
@@ -113,8 +113,30 @@ function App() {
     setHourlySeven(getNextSevenHours(hourly));
   }, [hourly]);
 
+  // convert iso date to readable format
+  useEffect(() => {
+    const formatted = daily?.time?.map(d => {
+      const date = new Date(d);
+      return date.toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short"
+      });
+    });
+    setFormattedDates(formatted)
+  }, [daily])
 
-
+  // make daily data
+  useEffect(() => {
+    const dailyData = Array.from({ length: 7 }, (_, dailyIndex) => {
+      return {
+        time: formattedDates?.[dailyIndex],
+        temp: daily?.temperature_2m_max?.[dailyIndex],
+        type: getWeatherCategory(daily?.weathercode?.[dailyIndex]),
+      }
+    })
+    setDailyObjs(dailyData)
+  }, [daily])
 
   return (
     <div className='main-wrapper'>
@@ -129,7 +151,12 @@ function App() {
         </div>
       </div>
       <div className='main-right'>
-        <LeftTop />
+        <p className='main-right-head'>next few days</p>
+        <div className='main-right-daily'>
+          {dailyObjs?.map((dailyItem: HourlyItemType, dailyIndex: number) => (
+            <HourlyCard key={dailyIndex} time={dailyItem?.time} temp={dailyItem?.temp} type={dailyItem?.type} />
+          ))}
+        </div>
       </div>
     </div>
   )
