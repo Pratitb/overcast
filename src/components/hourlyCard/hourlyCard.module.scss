@@ -22,5 +22,28 @@
     &__type {
         font-size: 14px;
         color: $hourly-type;
+        text-transform: capitalize;
+    }
+
+    &__sunny {
+        border: 1px solid $sunny-brdr;
+        background: $sunny;
+    }
+
+    &__cloudy,
+    &__foggy {
+        border: 1px solid $cloudy-brdr;
+        background: $cloudy;
+    }
+
+    &__rainy,
+    &__snowy {
+        border: 1px solid $rainy-brdr;
+        background: $rainy;
+    }
+
+    &__stormy {
+        border: 1px solid $stormy-brdr;
+        background: $stormy;
     }
 }

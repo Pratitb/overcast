@@ -1,11 +1,11 @@
-import './styles/App.scss'
+import './styles/app.scss'
 import LeftMid from './components/leftMid/leftMid'
 import LeftTop from './components/leftTop/leftTop'
 import { useEffect, useState } from 'react';
 import type { CurrWeathType, HourlyDataType, HourlyItemType, WeatherType } from './types';
 import HourlyCard from './components/hourlyCard/hourlyCard';
 
-function App() {
+const App = () => {
 
   // greeting states ----------------------------------------------------
   const [greeting, setGreeting] = useState<string>('');
@@ -63,23 +63,20 @@ function App() {
     }
 
   }
-
   // call geolocation on initial render ----------------------------------------------------
   useEffect(() => {
     getGeoLocation()
   }, [])
-
   // decide weather type ----------------------------------------------------
   const getWeatherCategory = (code: number) => {
-    if ([0, 1].includes(code ?? 0)) return "Sunny";
-    if ([2, 3].includes(code ?? 0)) return "Cloudy";
-    if ([45, 48].includes(code ?? 0)) return "Foggy";
-    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return "Rainy";
-    if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return "Snowy";
-    if ([95, 96, 99].includes(code)) return "Stormy";
-    return "Unknown";
+    if ([0, 1].includes(code ?? null)) return "sunny";
+    if ([2, 3].includes(code ?? null)) return "cloudy";
+    if ([45, 48].includes(code ?? null)) return "foggy";
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return "rainy";
+    if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return "snowy";
+    if ([95, 96, 99].includes(code)) return "stormy";
+    return "unknown";
   }
-
   // get next seven hours
   const getNextSevenHours = (hourly: any) => {
     if (!hourly || !hourly.time) return [];
@@ -101,12 +98,11 @@ function App() {
     const nextSeven = hourly?.time?.slice(currentIndex + 1, currentIndex + 10)?.map((time: string, index: number) => ({
       time: time?.split("T")[1],
       temp: hourly?.temperature_2m[currentIndex + index],
-      type: getWeatherCategory(hourly?.weathercode[currentIndex + index] ?? 0),
+      type: getWeatherCategory(hourly?.weathercode[currentIndex + index] ?? null),
     }));
 
     return nextSeven;
   };
-
   // call seven hour data function ----------------------------------------------------
   useEffect(() => {
     if (!hourly) return;
@@ -141,21 +137,23 @@ function App() {
   return (
     <div className='main-wrapper'>
       <p className='main-app-name'>overcast</p>
-      <div className='main-left'>
-        <LeftTop greetingVal={greeting} dateVal={getDate} locationName={`${weather?.latitude}, ${weather?.longitude}`} />
-        <LeftMid currentTemp={currWeath?.temperature} weathType={getWeatherCategory(currWeath?.weathercode ?? 0)} speed={currWeath?.windspeed} speedUnit={weather?.current_weather_units?.windspeed} />
-        <div className='main-left-hourly'>
-          {hourlySeven?.map((hourlyItem: HourlyItemType, hourlyIndex: number) => (
-            <HourlyCard key={hourlyIndex} time={hourlyItem?.time} temp={hourlyItem?.temp} type={hourlyItem?.type} />
-          ))}
+      <div className='main-left-right'>
+        <div className='main-left'>
+          <LeftTop greetingVal={greeting} dateVal={getDate} locationName={`${weather?.latitude}, ${weather?.longitude}`} />
+          <LeftMid currentTemp={currWeath?.temperature} weathType={getWeatherCategory(currWeath?.weathercode ?? 0)} speed={currWeath?.windspeed} speedUnit={weather?.current_weather_units?.windspeed} />
+          <div className='main-left-hourly'>
+            {hourlySeven?.map((hourlyItem: HourlyItemType, hourlyIndex: number) => (
+              <HourlyCard key={hourlyIndex} time={hourlyItem?.time} temp={hourlyItem?.temp} type={hourlyItem?.type} />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className='main-right'>
-        <p className='main-right-head'>next few days</p>
-        <div className='main-right-daily'>
-          {dailyObjs?.map((dailyItem: HourlyItemType, dailyIndex: number) => (
-            <HourlyCard key={dailyIndex} time={dailyItem?.time} temp={dailyItem?.temp} type={dailyItem?.type} />
-          ))}
+        <div className='main-right'>
+          <p className='main-right-head'>next few days</p>
+          <div className='main-right-daily'>
+            {dailyObjs?.map((dailyItem: HourlyItemType, dailyIndex: number) => (
+              <HourlyCard key={dailyIndex} time={dailyItem?.time} temp={dailyItem?.temp} type={dailyItem?.type} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
