@@ -32,6 +32,7 @@ const App = () => {
   const [daily, setDaily] = useState<DailyDataType>()
   const [formattedDates, setFormattedDates] = useState<string[]>()
   const [dailyObjs, setDailyObjs] = useState<DailyWeathType[]>()
+  console.log(dailyObjs, 'dailyObjs')
   const [hourly, setHourly] = useState<HourlyDataType>()
   const [hourlySeven, setHourlySeven] = useState<any>([])
 
