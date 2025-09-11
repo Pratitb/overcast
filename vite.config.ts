@@ -3,6 +3,7 @@ import path from 'path';
 
 export default defineConfig({
   // Your framework plugin (e.g., react())
+  base: '/overcast/',
   plugins: [],
 
   resolve: {

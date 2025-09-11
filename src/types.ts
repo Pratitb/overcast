@@ -67,3 +67,10 @@ export type HourlyItemType = {
     temp?: number
     type?: string
 }
+export type DailyDataType = {
+    precipitation_sum?: number[]
+    temperature_2m_max?: number[]
+    temperature_2m_min?: number[]
+    time?: string[]
+    weathercode?: number[]
+}

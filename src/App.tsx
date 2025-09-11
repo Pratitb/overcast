@@ -2,7 +2,7 @@ import './styles/app.scss'
 import LeftMid from './components/leftMid/leftMid'
 import LeftTop from './components/leftTop/leftTop'
 import { useEffect, useState } from 'react';
-import type { CurrWeathType, HourlyDataType, HourlyItemType, WeatherType } from './types';
+import type { CurrWeathType, DailyDataType, DailyWeathType, HourlyDataType, HourlyItemType, WeatherType } from './types';
 import HourlyCard from './components/hourlyCard/hourlyCard';
 
 const App = () => {
@@ -29,9 +29,9 @@ const App = () => {
   const [weather, setWeather] = useState<WeatherType>()
   console.log(weather, 'weather')
   const [currWeath, setCurrWeath] = useState<CurrWeathType>()
-  const [daily, setDaily] = useState()
-  const [formattedDates, setFormattedDates] = useState([])
-  const [dailyObjs, setDailyObjs] = useState([])
+  const [daily, setDaily] = useState<DailyDataType>()
+  const [formattedDates, setFormattedDates] = useState<string[]>()
+  const [dailyObjs, setDailyObjs] = useState<DailyWeathType[]>()
   const [hourly, setHourly] = useState<HourlyDataType>()
   const [hourlySeven, setHourlySeven] = useState<any>([])
 
@@ -128,7 +128,7 @@ const App = () => {
       return {
         time: formattedDates?.[dailyIndex],
         temp: daily?.temperature_2m_max?.[dailyIndex],
-        type: getWeatherCategory(daily?.weathercode?.[dailyIndex]),
+        type: getWeatherCategory(daily?.weathercode?.[dailyIndex] ?? 5),
       }
     })
     setDailyObjs(dailyData)
