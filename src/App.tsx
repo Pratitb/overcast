@@ -27,12 +27,10 @@ const App = () => {
 
   // weather states ----------------------------------------------------
   const [weather, setWeather] = useState<WeatherType>()
-  console.log(weather, 'weather')
   const [currWeath, setCurrWeath] = useState<CurrWeathType>()
   const [daily, setDaily] = useState<DailyDataType>()
   const [formattedDates, setFormattedDates] = useState<string[]>()
   const [dailyObjs, setDailyObjs] = useState<HourlyItemType[]>()
-  console.log(dailyObjs, 'dailyObjs')
   const [hourly, setHourly] = useState<HourlyDataType>()
   const [hourlySeven, setHourlySeven] = useState<any>([])
 
@@ -125,15 +123,16 @@ const App = () => {
 
   // make daily data
   useEffect(() => {
+    if (!daily || !formattedDates) return; // Ensure both are loaded
     const dailyData = Array.from({ length: 7 }, (_, dailyIndex) => {
       return {
-        time: formattedDates?.[dailyIndex],
+        time: formattedDates[dailyIndex] ?? '', // fallback to empty string
         temp: daily?.temperature_2m_max?.[dailyIndex],
         type: getWeatherCategory(daily?.weathercode?.[dailyIndex] ?? 5),
       }
     })
     setDailyObjs(dailyData)
-  }, [daily])
+  }, [daily, formattedDates])
 
   return (
     <div className='main-wrapper'>
