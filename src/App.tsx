@@ -2,7 +2,7 @@ import './styles/app.scss'
 import LeftMid from './components/leftMid/leftMid'
 import LeftTop from './components/leftTop/leftTop'
 import { useEffect, useState } from 'react';
-import type { CurrWeathType, DailyDataType, DailyWeathType, HourlyDataType, HourlyItemType, WeatherType } from './types';
+import type { CurrWeathType, DailyDataType, HourlyDataType, HourlyItemType, WeatherType } from './types';
 import HourlyCard from './components/hourlyCard/hourlyCard';
 
 const App = () => {
@@ -31,7 +31,7 @@ const App = () => {
   const [currWeath, setCurrWeath] = useState<CurrWeathType>()
   const [daily, setDaily] = useState<DailyDataType>()
   const [formattedDates, setFormattedDates] = useState<string[]>()
-  const [dailyObjs, setDailyObjs] = useState<DailyWeathType[]>()
+  const [dailyObjs, setDailyObjs] = useState<HourlyItemType[]>()
   console.log(dailyObjs, 'dailyObjs')
   const [hourly, setHourly] = useState<HourlyDataType>()
   const [hourlySeven, setHourlySeven] = useState<any>([])
